@@ -1,26 +1,183 @@
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* =========================
+   THEME TEXT COLORS
+========================= */
+
+[data-theme="light"] {
+  color: #000000;
+  --color-base-content: #000000;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="dark"] {
+  color: #ffffff;
+  --color-base-content: #ffffff;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Global text colors */
+
+[data-theme="light"] body,
+[data-theme="light"] body * {
+  color: #000000;
 }
+
+[data-theme="dark"] body,
+[data-theme="dark"] body * {
+  color: #ffffff;
+}
+
+/* Input placeholders */
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #000000;
+  opacity: 0.6;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #ffffff;
+  opacity: 0.6;
+}
+
+/* Hero text: white in Light Mode */
+
+[data-theme="light"] .light-mode-hero-text {
+  color: #ffffff !important;
+}
+
+/* =========================
+   FOOTER — LIGHT MODE
+========================= */
+
+[data-theme="light"] footer#contact {
+  background-color: #f3f4f6 !important;
+  color: #000000;
+}
+
+[data-theme="light"] footer#contact h2,
+[data-theme="light"] footer#contact p,
+[data-theme="light"] footer#contact li,
+[data-theme="light"] footer#contact a,
+[data-theme="light"] footer#contact span {
+  color: #000000;
+}
+
+/* Footer brand accents */
+
+[data-theme="light"] footer#contact .text-emerald-700 {
+  color: #047857 !important;
+}
+
+[data-theme="light"] footer#contact .text-emerald-600 {
+  color: #059669 !important;
+}
+
+/* Footer logo icon */
+
+[data-theme="light"] footer#contact a span.bg-emerald-600 {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="light"] footer#contact a span.bg-emerald-600 svg {
+  color: #ffffff !important;
+}
+
+/* Footer borders */
+
+[data-theme="light"] footer#contact .border-t {
+  border-color: #e5e7eb !important;
+}
+
+/* =========================
+   FOOTER — DARK MODE
+========================= */
+
+[data-theme="dark"] footer#contact {
+  background-color: #020617 !important;
+  color: #ffffff;
+}
+
+[data-theme="dark"] footer#contact h2,
+[data-theme="dark"] footer#contact p,
+[data-theme="dark"] footer#contact li,
+[data-theme="dark"] footer#contact a,
+[data-theme="dark"] footer#contact span {
+  color: #ffffff;
+}
+
+/* Footer brand accents */
+
+[data-theme="dark"] footer#contact .text-emerald-400,
+[data-theme="dark"] footer#contact .text-emerald-700 {
+  color: #34d399 !important;
+}
+
+/* Footer logo icon */
+
+[data-theme="dark"] footer#contact a span.bg-emerald-600 {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] footer#contact a span.bg-emerald-600 svg {
+  color: #ffffff !important;
+}
+
+/* Footer borders */
+
+[data-theme="dark"] footer#contact .border-t {
+  border-color: #293548 !important;
+}
+
+/* =========================
+   FOOTER HOVER EFFECTS
+   Dark emerald green
+========================= */
+
+#contact h2,
+#contact p,
+#contact li,
+#contact a,
+#contact li span {
+  transition: color 0.3s ease;
+}
+
+/* Light mode hover */
+
+[data-theme="light"] footer#contact h2:hover,
+[data-theme="light"] footer#contact p:hover,
+[data-theme="light"] footer#contact li:hover,
+[data-theme="light"] footer#contact li span:hover,
+[data-theme="light"] footer#contact a:hover {
+  color: #047857 !important;
+}
+
+/* Dark mode hover */
+
+[data-theme="dark"] footer#contact h2:hover,
+[data-theme="dark"] footer#contact p:hover,
+[data-theme="dark"] footer#contact li:hover,
+[data-theme="dark"] footer#contact li span:hover,
+[data-theme="dark"] footer#contact a:hover {
+  color: #047857 !important;
+}
+
+/* Keep logo icon white on hover */
+
+[data-theme="light"] footer#contact a:hover span.bg-emerald-600,
+[data-theme="dark"] footer#contact a:hover span.bg-emerald-600 {
+  color: #ffffff !important;
+}
+
+[data-theme="light"] footer#contact a:hover span.bg-emerald-600 svg,
+[data-theme="dark"] footer#contact a:hover span.bg-emerald-600 svg {
+  color: #ffffff !important;
+}
+
