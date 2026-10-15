@@ -1,164 +1,10 @@
 'use client'
 
-import {
-  ArrowRight,
-  BadgeCheck,
-  CarFront,
-  Search,
-  ShieldCheck,
-} from 'lucide-react'
+import { ArrowRight, BadgeCheck, CarFront, Search, ShieldCheck } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import CarCard, { type Car } from '../cars/CarCard'
-
-const featuredCars: Car[] = [
-  {
-    id: 1,
-    name: 'Toyota Corolla Axio',
-    year: 2022,
-    price: 2450000,
-    mileage: '25,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'Sedan',
-    image:
-      'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=1000&q=80',
-    featured: true,
-  },
-  {
-    id: 2,
-    name: 'Honda Vezel',
-    year: 2021,
-    price: 3250000,
-    mileage: '32,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1000&q=80',
-    featured: true,
-  },
-  {
-    id: 3,
-    name: 'Toyota Prius',
-    year: 2020,
-    price: 2850000,
-    mileage: '38,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'Hatchback',
-    image:
-      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1000&q=80',
-    featured: true,
-  },
-  {
-    id: 4,
-    name: 'Honda Civic',
-    year: 2022,
-    price: 3100000,
-    mileage: '28,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Sedan',
-    image:
-      'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 5,
-    name: 'Toyota RAV4',
-    year: 2021,
-    price: 4650000,
-    mileage: '30,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 6,
-    name: 'BMW 3 Series',
-    year: 2020,
-    price: 5500000,
-    mileage: '35,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Luxury',
-    image:
-      'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 7,
-    name: 'Nissan X-Trail',
-    year: 2021,
-    price: 3900000,
-    mileage: '33,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 8,
-    name: 'Mercedes-Benz C-Class',
-    year: 2020,
-    price: 6200000,
-    mileage: '35,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Luxury',
-    image:
-      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 9,
-    name: 'Honda Grace',
-    year: 2021,
-    price: 2350000,
-    mileage: '29,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'Sedan',
-    image:
-      'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 10,
-    name: 'Toyota Harrier',
-    year: 2022,
-    price: 5200000,
-    mileage: '22,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 11,
-    name: 'Audi A4',
-    year: 2021,
-    price: 4900000,
-    mileage: '27,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Luxury',
-    image:
-      'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=1000&q=80',
-  },
-  {
-    id: 12,
-    name: 'Toyota Yaris',
-    year: 2022,
-    price: 2150000,
-    mileage: '20,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Hatchback',
-    image:
-      'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1000&q=80',
-  },
-]
+import CarCard from '../cars/CarCard'
+import type { CarCardData } from '../../lib/types'
 
 const benefits = [
   {
@@ -202,7 +48,11 @@ const heroImages = [
   },
 ]
 
-export default function Home() {
+type HomeProps = {
+  cars: CarCardData[]
+}
+
+export default function Home({ cars }: HomeProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All')
   const [activeHeroImage, setActiveHeroImage] = useState(0)
@@ -216,24 +66,23 @@ export default function Home() {
   }, [])
 
   const categories = useMemo(
-    () => ['All', ...new Set(featuredCars.map((car) => car.category))],
-    [],
+    () => ['All', ...new Set(cars.map((car) => car.category))],
+    [cars],
   )
 
   const filteredCars = useMemo(() => {
     const query = search.trim().toLowerCase()
 
-    return featuredCars.filter((car) => {
+    return cars.filter((car) => {
       const matchesSearch =
         car.name.toLowerCase().includes(query) ||
         String(car.year).includes(query)
 
-      const matchesCategory =
-        category === 'All' || car.category === category
+      const matchesCategory = category === 'All' || car.category === category
 
       return matchesSearch && matchesCategory
     })
-  }, [search, category])
+  }, [cars, search, category])
 
   return (
     <div>
@@ -335,7 +184,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Cars — 12 Cards */}
+      {/* Featured Cars */}
       <section
         id="featured"
         className="scroll-mt-20 bg-base-100 px-4 py-16 sm:px-6 lg:px-8 lg:py-24"
@@ -409,39 +258,40 @@ export default function Home() {
                 aria-hidden="true"
               />
 
-              <h3 className="mt-4 text-xl font-bold">No cars found</h3>
+              <h3 className="mt-4 text-xl font-bold">
+                {cars.length === 0 ? 'No cars available yet' : 'No cars found'}
+              </h3>
 
               <p className="mt-2 text-sm text-base-content/60">
-                Try a different search term or category.
+                {cars.length === 0
+                  ? 'Our inventory is being updated. Please check back soon.'
+                  : 'Try a different search term or category.'}
               </p>
 
-              <button
-                type="button"
-                className={`btn btn-sm mt-5 ${greenButtonClass}`}
-                onClick={() => {
-                  setSearch('')
-                  setCategory('All')
-                }}
-              >
-                Clear Filters
-              </button>
+              {cars.length > 0 && (
+                <button
+                  type="button"
+                  className={`btn btn-sm mt-5 ${greenButtonClass}`}
+                  onClick={() => {
+                    setSearch('')
+                    setCategory('All')
+                  }}
+                >
+                  Clear Filters
+                </button>
+              )}
             </div>
           )}
 
           <div className="mt-10 text-center">
-            <a
+            <Link
               href="/cars"
               className="btn btn-lg rounded-xl border-emerald-600 bg-emerald-600 text-white transition-colors hover:!border-emerald-700 hover:!bg-emerald-700 hover:!text-white"
             >
               View All Cars
               <ArrowRight size={19} aria-hidden="true" />
-            </a>
+            </Link>
           </div>
-
-          <p className="mt-6 text-center text-xs leading-5 text-base-content/50">
-            Vehicle details, prices and availability are sample frontend data.
-            Please confirm actual showroom inventory before purchasing.
-          </p>
         </div>
       </section>
 
@@ -466,38 +316,36 @@ export default function Home() {
             </p>
           </div>
 
-     
-<div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
-  {benefits.map(({ icon: Icon, title, description }, index) => (
-    <article
-      key={title}
-      className="group relative overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-emerald-600 hover:shadow-xl sm:p-8"
-    >
-      <div className="absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full bg-emerald-500/5 transition-transform duration-500 group-hover:scale-150" />
+          <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {benefits.map(({ icon: Icon, title, description }, index) => (
+              <article
+                key={title}
+                className="group relative overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:border-emerald-600 hover:shadow-xl sm:p-8"
+              >
+                <div className="absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full bg-emerald-500/5 transition-transform duration-500 group-hover:scale-150" />
 
-      <div className="relative flex items-center justify-between">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600/10 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-700 group-hover:text-white">
-          <Icon size={27} aria-hidden="true" />
-        </div>
+                <div className="relative flex items-center justify-between">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-600/10 text-emerald-600 transition-colors duration-300 group-hover:bg-emerald-700 group-hover:text-white">
+                    <Icon size={27} aria-hidden="true" />
+                  </div>
 
-        <span className="text-sm font-black tracking-widest text-base-content/30">
-          {String(index + 1).padStart(2, '0')}
-        </span>
-      </div>
+                  <span className="text-sm font-black tracking-widest text-base-content/30">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
 
-      <h3 className="relative mt-7 text-xl font-bold tracking-tight">
-        {title}
-      </h3>
+                <h3 className="relative mt-7 text-xl font-bold tracking-tight">
+                  {title}
+                </h3>
 
-      <p className="relative mt-3 text-sm leading-7 text-base-content/65">
-        {description}
-      </p>
+                <p className="relative mt-3 text-sm leading-7 text-base-content/65">
+                  {description}
+                </p>
 
-      <div className="relative mt-6 h-1 w-10 rounded-full bg-emerald-600 transition-all duration-300 group-hover:w-20" />
-    </article>
-  ))}
-</div>
-
+                <div className="relative mt-6 h-1 w-10 rounded-full bg-emerald-600 transition-all duration-300 group-hover:w-20" />
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -515,19 +363,15 @@ export default function Home() {
             </p>
           </div>
 
-         
-<a
-  href="#contact"
-  className={`btn btn-lg shrink-0 ${greenButtonClass} transition-colors duration-300 hover:!border-green-800 hover:!bg-green-800 hover:!text-white`}
->
-  Contact Us
-  <ArrowRight size={18} aria-hidden="true" />
-</a>
-
-
+          <a
+            href="#contact"
+            className={`btn btn-lg shrink-0 ${greenButtonClass} transition-colors duration-300 hover:!border-green-800 hover:!bg-green-800 hover:!text-white`}
+          >
+            Contact Us
+            <ArrowRight size={18} aria-hidden="true" />
+          </a>
         </div>
       </section>
     </div>
   )
 }
-

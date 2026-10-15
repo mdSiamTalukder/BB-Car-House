@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400" role="img" aria-label="Vehicle image placeholder">
+  <rect width="640" height="400" fill="#e5e7eb"/>
+  <g fill="none" stroke="#9ca3af" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 250h340l-24-78a34 34 0 0 0-32-24H206a34 34 0 0 0-32 24Z"/>
+    <path d="M150 250v34h40v-34M490 250v34h-40v-34"/>
+    <circle cx="212" cy="284" r="26" fill="#e5e7eb"/>
+    <circle cx="428" cy="284" r="26" fill="#e5e7eb"/>
+  </g>
+  <text x="320" y="360" font-family="system-ui, sans-serif" font-size="24" fill="#6b7280" text-anchor="middle">BB Car House</text>
+</svg>

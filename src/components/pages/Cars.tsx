@@ -8,96 +8,25 @@ import {
   SlidersHorizontal,
   X,
 } from 'lucide-react'
-import CarCard, { type Car } from '../cars/CarCard'
+import CarCard from '../cars/CarCard'
+import type { CarCardData } from '../../lib/types'
 
-// Temporary frontend data.
-// Later, replace this array with real data from your backend API.
-const cars: Car[] = [
-  {
-    id: 1,
-    name: 'Toyota Corolla',
-    year: 2022,
-    price: 2850000,
-    mileage: '25,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Sedan',
-    image:
-      'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&w=1000&q=85',
-    featured: true,
-  },
-  {
-    id: 2,
-    name: 'Honda Civic',
-    year: 2021,
-    price: 3200000,
-    mileage: '32,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Sedan',
-    image:
-      'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=1000&q=85',
-  },
-  {
-    id: 3,
-    name: 'Toyota RAV4',
-    year: 2023,
-    price: 4800000,
-    mileage: '18,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=1000&q=85',
-    featured: true,
-  },
-  {
-    id: 4,
-    name: 'BMW 3 Series',
-    year: 2021,
-    price: 5500000,
-    mileage: '28,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Luxury',
-    image:
-      'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1000&q=85',
-  },
-  {
-    id: 5,
-    name: 'Honda Vezel',
-    year: 2022,
-    price: 3500000,
-    mileage: '22,000 km',
-    fuel: 'Hybrid',
-    transmission: 'Automatic',
-    category: 'SUV',
-    image:
-      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1000&q=85',
-  },
-  {
-    id: 6,
-    name: 'Mercedes-Benz C-Class',
-    year: 2020,
-    price: 6200000,
-    mileage: '35,000 km',
-    fuel: 'Petrol',
-    transmission: 'Automatic',
-    category: 'Luxury',
-    image:
-      'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1000&q=85',
-  },
-]
+type CarsProps = {
+  cars: CarCardData[]
+  categories: string[]
+}
 
-const categories = ['All Cars', 'Sedan', 'SUV', 'Luxury']
-
-
-export default function Cars() {
+export default function Cars({ cars, categories }: CarsProps) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All Cars')
   const [maxPrice, setMaxPrice] = useState('all')
   const [sortBy, setSortBy] = useState('featured')
   const [filtersOpen, setFiltersOpen] = useState(false)
+
+  const categoryOptions = useMemo(
+    () => ['All Cars', ...categories],
+    [categories],
+  )
 
   const filteredCars = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -111,8 +40,7 @@ export default function Cars() {
       const matchesCategory =
         category === 'All Cars' || car.category === category
 
-      const matchesPrice =
-        maxPrice === 'all' || car.price <= Number(maxPrice)
+      const matchesPrice = maxPrice === 'all' || car.price <= Number(maxPrice)
 
       return matchesSearch && matchesCategory && matchesPrice
     })
@@ -132,7 +60,7 @@ export default function Cars() {
     }
 
     return result
-  }, [search, category, maxPrice, sortBy])
+  }, [cars, search, category, maxPrice, sortBy])
 
   const clearFilters = () => {
     setSearch('')
@@ -145,7 +73,7 @@ export default function Cars() {
     <div className="min-h-screen bg-base-100 text-base-content">
       {/* Page Hero */}
       <section className="relative overflow-hidden bg-base-200 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
 
         <div className="relative mx-auto max-w-7xl">
@@ -262,7 +190,7 @@ export default function Cars() {
               <div>
                 <p className="mb-3 text-sm font-bold">Car Category</p>
                 <div className="flex flex-wrap gap-2">
-                  {categories.map((item) => (
+                  {categoryOptions.map((item) => (
                     <button
                       key={item}
                       type="button"
@@ -325,30 +253,34 @@ export default function Cars() {
                 size={42}
                 className="mx-auto mb-4 text-base-content/40"
               />
-              <h3 className="text-xl font-bold">No Cars Found</h3>
+              <h3 className="text-xl font-bold">
+                {cars.length === 0 ? 'No Cars Available Yet' : 'No Cars Found'}
+              </h3>
               <p className="mt-2 text-base-content/65">
-                Try changing your search or filters to see more cars.
+                {cars.length === 0
+                  ? 'Our inventory is being updated. Please check back soon.'
+                  : 'Try changing your search or filters to see more cars.'}
               </p>
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="btn btn-primary mt-5 rounded-xl"
-              >
-                Clear All Filters
-              </button>
+              {cars.length > 0 && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="btn btn-primary mt-5 rounded-xl"
+                >
+                  Clear All Filters
+                </button>
+              )}
             </div>
           )}
 
           {/* Disclaimer */}
           <p className="mt-8 text-sm leading-6 text-base-content/55">
-            Note: The displayed vehicle information and prices are sample
-            frontend data for layout development. Confirm actual availability,
-            mileage, condition, registration and price with BB Car House before
-            making a purchase.
+            Note: Vehicle information and prices are provided by BB Car House
+            and may change. Confirm actual availability, mileage, condition,
+            registration and price before making a purchase.
           </p>
         </div>
       </section>
     </div>
   )
 }
-

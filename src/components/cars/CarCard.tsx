@@ -1,23 +1,10 @@
+import Link from 'next/link'
+import { ArrowUpRight, Fuel, Gauge, Settings2 } from 'lucide-react'
+import type { CarCardData } from '../../lib/types'
+import { FALLBACK_CAR_IMAGE } from '../../lib/constants'
 
-import {
-  ArrowUpRight,
-  Fuel,
-  Gauge,
-  Settings2,
-} from 'lucide-react'
-
-export type Car = {
-  id: number
-  name: string
-  year: number
-  price: number
-  mileage: string
-  fuel: string
-  transmission: string
-  category: string
-  image: string
-  featured?: boolean
-}
+/** Backwards-compatible alias used by the public pages. */
+export type Car = CarCardData
 
 type CarCardProps = {
   car: Car
@@ -26,26 +13,43 @@ type CarCardProps = {
 const greenButtonClass =
   '!border-white !bg-white !text-black shadow-sm transition-colors duration-200 hover:!border-green-800 hover:!bg-green-800 hover:!text-white dark:!border-white dark:!bg-black dark:!text-white dark:hover:!border-green-800 dark:hover:!bg-green-800 dark:hover:!text-white'
 
+const statusLabels: Record<string, string> = {
+  AVAILABLE: 'Available',
+  RESERVED: 'Reserved',
+  SOLD: 'Sold',
+}
+
 export default function CarCard({ car }: CarCardProps) {
   return (
     <article className="group card h-full overflow-hidden border border-[#60A5FA] bg-base-100 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-[#60A5FA]">
       {/* Car Image */}
       <figure className="relative aspect-[16/10] overflow-hidden bg-base-200">
         <img
-          src={car.image}
+          src={car.image || FALLBACK_CAR_IMAGE}
           alt={`${car.year} ${car.name}`}
           loading="lazy"
+          onError={(event) => {
+            event.currentTarget.src = FALLBACK_CAR_IMAGE
+          }}
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5" />
+
+        {car.status && car.status !== 'AVAILABLE' && (
+          <span className="absolute top-3 left-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white">
+            {statusLabels[car.status] ?? car.status}
+          </span>
+        )}
       </figure>
 
       {/* Car Information */}
       <div className="card-body flex flex-1 gap-4 p-4 sm:p-5">
         <div>
           <h3 className="mt-2 text-lg leading-snug font-bold text-base-content transition-colors duration-300 hover:!text-green-600 sm:text-xl">
-            {car.name}
+            <Link href={`/cars/${car.slug}`} className="hover:!text-green-600">
+              {car.name}
+            </Link>
           </h3>
 
           <p className="mt-3 text-2xl font-black tracking-tight text-[#047857] dark:text-[#93C5FD]">
@@ -90,15 +94,14 @@ export default function CarCard({ car }: CarCardProps) {
         </div>
 
         {/* Action */}
-        <a
-          href="#contact"
+        <Link
+          href={`/cars/${car.slug}`}
           className={`btn mt-auto w-full rounded-xl font-semibold shadow-sm transition-colors ${greenButtonClass}`}
         >
-          Inquire About Car
+          View Details
           <ArrowUpRight size={18} aria-hidden="true" />
-        </a>
+        </Link>
       </div>
     </article>
   )
 }
-

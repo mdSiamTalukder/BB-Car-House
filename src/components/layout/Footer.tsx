@@ -1,5 +1,7 @@
 
-import { ArrowUpRight, CarFront, MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, CarFront, Mail, MapPin, Phone } from 'lucide-react'
+import { getDealerInfo } from '../../lib/dealer'
+import { buildMailtoHref, toTelHref } from '../../lib/contact'
 
 const quickLinks = [
   { label: 'Home', href: '#home' },
@@ -17,6 +19,7 @@ const services = [
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const dealer = getDealerInfo()
 
   return (
     <footer
@@ -90,7 +93,22 @@ className="scroll-mt-24 border-t border-gray-200 bg-gray-100 text-black dark:bor
                 aria-hidden="true"
                 className="mt-1 shrink-0 text-emerald-700 dark:text-emerald-400"
               />
-              <span>Showroom address coming soon.</span>
+              {dealer.address ? (
+                dealer.mapUrl ? (
+                  <a
+                    href={dealer.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-emerald-700 dark:hover:text-emerald-400"
+                  >
+                    {dealer.address}
+                  </a>
+                ) : (
+                  <span>{dealer.address}</span>
+                )
+              ) : (
+                <span>Showroom address coming soon.</span>
+              )}
             </li>
 
             <li className="flex items-center gap-3">
@@ -99,8 +117,33 @@ className="scroll-mt-24 border-t border-gray-200 bg-gray-100 text-black dark:bor
                 aria-hidden="true"
                 className="shrink-0 text-emerald-700 dark:text-emerald-400"
               />
-              <span>Contact number coming soon.</span>
+              {dealer.phone ? (
+                <a
+                  href={toTelHref(dealer.phone)}
+                  className="transition-colors hover:text-emerald-700 dark:hover:text-emerald-400"
+                >
+                  {dealer.phone}
+                </a>
+              ) : (
+                <span>Contact number coming soon.</span>
+              )}
             </li>
+
+            {dealer.email && (
+              <li className="flex items-center gap-3">
+                <Mail
+                  size={18}
+                  aria-hidden="true"
+                  className="shrink-0 text-emerald-700 dark:text-emerald-400"
+                />
+                <a
+                  href={buildMailtoHref(dealer.email)}
+                  className="transition-colors hover:text-emerald-700 dark:hover:text-emerald-400"
+                >
+                  {dealer.email}
+                </a>
+              </li>
+            )}
           </ul>
 
           <a

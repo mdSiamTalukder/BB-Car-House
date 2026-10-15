@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '../context/ThemeContext'
-import MainLayout from '../layouts/MainLayout'
 
 export const metadata: Metadata = {
-  title: 'bb-car-house',
+  title: {
+    default: 'BB Car House',
+    template: '%s | BB Car House',
+  },
+  description:
+    'Find your next car with confidence. Explore the BB Car House collection and contact our team.',
   icons: {
     icon: '/favicon.svg',
   },
@@ -14,9 +18,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <MainLayout>{children}</MainLayout>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
